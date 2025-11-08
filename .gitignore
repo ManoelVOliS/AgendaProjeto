@@ -1,0 +1,26 @@
+# --- Visual Studio / .NET ---
+## Cobre os ficheiros compilados (bin), objetos (obj), etc.
+[Bb]in/
+[Oo]bj/
+
+# --- Ficheiros de IDE/Sistema ---
+.vs/
+.vscode/
+*.suo
+*.user
+
+# --- Ficheiros do EF Core ---
+*.db
+*.db-shm
+*.db-wal
+
+# --- Segredos! NUNCA envie este ficheiro ---
+# (É melhor usar "User Secrets", mas para este projeto, isto serve)
+appsettings.Development.json
+
+# --- Frontend / Node.js ---
+## Cobre a pasta que contém milhões de ficheiros
+node_modules/
+dist/
+.npm/
+npm-debug.log*
