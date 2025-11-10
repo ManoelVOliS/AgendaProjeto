@@ -16,11 +16,18 @@ namespace Agenda.Api.Services
 
         public async Task<Contato> CreateContatoAsync(Contato contato)
         {
-            if (contato.Nome.ToLower() == "teste")
+            var infoExistente = await _contatoRepository.GetByEmailAsync(contato.Email);
+            if(infoExistente != null)
             {
-                throw new System.Exception("Nome 'teste' não é permitido.");
+                throw new Exception("Email já cadastrado");
             }
 
+            var telefoneExistente = await _contatoRepository.GetByTelefoneAsync(contato.Telefone);
+            if(telefoneExistente != null)
+            {
+                throw new Exception("Telefone já cadastrado");
+            }
+            
             return await _contatoRepository.AddAsync(contato);
         }
 

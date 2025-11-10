@@ -37,6 +37,18 @@ namespace Agenda.Infrastructure.Repositories
             return await _dbContext.Contatos.FindAsync(id);
         }
 
+        public async Task<Contato?> GetByEmailAsync(string email)
+        {
+            return await _dbContext.Contatos
+                .FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+        }
+
+        public async Task<Contato?> GetByTelefoneAsync(string telefone)
+        {
+            return await _dbContext.Contatos
+                .FirstOrDefaultAsync(c => c.Telefone == telefone.Trim());
+        }
+
         public async Task UpdateAsync(Contato contato)
         {
             _dbContext.Contatos.Update(contato);

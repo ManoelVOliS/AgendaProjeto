@@ -9,5 +9,7 @@ namespace Agenda.Core.Interface
         Task<Contato> AddAsync(Contato contato);
         Task UpdateAsync(Contato contato);
         Task DeleteAsync(Contato contato);
+        Task<Contato?> GetByEmailAsync(string email);
+        Task<Contato?> GetByTelefoneAsync(string telefone);
     }
 }
