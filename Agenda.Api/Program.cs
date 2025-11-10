@@ -1,20 +1,31 @@
 using Agenda.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Agenda.Core.Interface; // (singular, como a sua pasta)
+using Agenda.Core.Interface;
 using Agenda.Infrastructure.Repositories;
 using Agenda.Api.Services;
 using Agenda.Api.Mappers;
 using FluentValidation;
-using FluentValidation.AspNetCore; // <-- ADICIONE ESTA LINHA
+using FluentValidation.AspNetCore;
 using Agenda.Api.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona serviços ao contêiner.
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                        policy  =>
+                        {
+                            policy.WithOrigins("http://localhost:5173") 
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                        });
+});
+
 builder.Services.AddControllers();
 
-// Adiciona o Swagger (Configuração Clássica Completa)
-builder.Services.AddEndpointsApiExplorer(); // <-- MUDANÇA
+builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateContatoValidator>();
@@ -40,12 +51,13 @@ var app = builder.Build();
 // Configura o pipeline de requisições HTTP.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();   // <-- MUDANÇA
-    app.UseSwaggerUI(); // <-- MUDANÇA
+    app.UseSwagger();  
+    app.UseSwaggerUI(); 
 }
 
-// app.UseHttpsRedirection(); // Pode comentar isto para evitar o aviso
+app.UseCors(MyAllowSpecificOrigins);
 
+// app.UseHttpsRedirection(); // Pode comentar isto para evitar o aviso
 app.UseAuthorization();
 
 // Diz à API para usar os Controladores que criamos
