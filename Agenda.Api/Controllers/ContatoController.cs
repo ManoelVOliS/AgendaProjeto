@@ -45,12 +45,19 @@ namespace Agenda.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateContatoDto contatoDto)
         {
-        
-            var contato = _mapper.Map<Contato>(contatoDto); 
-            
-            var novoContato = await _cadastroService.CreateContatoAsync(contato);
+            try
+            {
+                var contato = _mapper.Map<Contato>(contatoDto); 
+                var novoContato = await _cadastroService.CreateContatoAsync(contato);
 
-            return CreatedAtAction(nameof(GetById), new { id = novoContato.Id }, novoContato);
+                return CreatedAtAction(nameof(GetById), new { id = novoContato.Id }, novoContato);    
+            }
+            catch (Exception ex)
+            {
+                
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         // PUT: api/Contatos/5

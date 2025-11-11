@@ -27,7 +27,7 @@ namespace Agenda.Api.Services
             {
                 throw new Exception("Telefone já cadastrado");
             }
-            
+
             return await _contatoRepository.AddAsync(contato);
         }
 
@@ -51,6 +51,17 @@ namespace Agenda.Api.Services
 
         public async Task UpdateContatoAsync(Contato contato)
         {
+            var emailExistente = await _contatoRepository.GetByEmailAsync(contato.Email);
+            if (emailExistente != null && emailExistente.Id != contato.Id) 
+            {
+                throw new System.Exception("Email já cadastrado");
+            }
+            
+            var telefoneExistente = await _contatoRepository.GetByTelefoneAsync(contato.Telefone);
+            if (telefoneExistente != null && telefoneExistente.Id != contato.Id)
+            {
+                throw new System.Exception("Telefone já cadastrado");
+            }
             var contatoExistente = await _contatoRepository.GetByIdAsync(contato.Id);
             if (contatoExistente == null)
             {

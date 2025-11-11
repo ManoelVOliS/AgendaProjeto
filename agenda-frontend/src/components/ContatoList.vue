@@ -62,8 +62,22 @@ async function salvarContato(contato) {
     
   } catch (error) {
     console.error("Erro ao salvar contato:", error);
+
     if (error.response && error.response.status === 400) {
-      alert("Erro de validação: " + JSON.stringify(error.response.data.errors));
+      if (error.response.data.erros) {
+
+        let mensagens = Object.values(error.response.data.erros).join('\n');
+        alert(`Erros de validação:\n${mensagens}`);
+
+      } else if (typeof error.response.data === 'string') {
+
+        alert(error.response.data);
+
+      } else {
+        alert('Ocorreu um erro ao salvar o contato.');
+      }
+    } else {
+      alert('Ocorreu um erro ao salvar o contato.');
     }
   }
 }
@@ -76,6 +90,7 @@ async function apagarContato(contato) {
       carregarContatos(); // Recarrega a tabela
     } catch (error) {
       console.error("Erro ao apagar contato:", error);
+      alert('Ocorreu um erro ao apagar o contato.');
     }
   }
 }
