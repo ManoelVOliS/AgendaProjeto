@@ -1,0 +1,3 @@
+# Não copie as pastas de compilação locais para dentro do container
+**/bin/
+**/obj/
