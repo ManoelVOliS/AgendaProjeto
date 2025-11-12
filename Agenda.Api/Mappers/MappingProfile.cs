@@ -8,8 +8,8 @@ namespace Agenda.Api.Mappers
     {
         public MappingProfile() 
         {
-            CreateMap<CreateContatoDto, Contato>();
-            CreateMap<UpdateContatoDto, Contato>(); 
+            CreateMap<CreateContactDto, Contact>();
+            CreateMap<UpdateContactDto, Contact>(); 
         }
 
     }

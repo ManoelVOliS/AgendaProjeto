@@ -8,19 +8,19 @@ const apiClient = axios.create({
 })
 
 export default {
-    getContatos(){
-        return apiClient.get('/Contatos');
+    getContacts(){
+        return apiClient.get('/Contacts');
     },
-    getContato(id){
-        return apiClient.get(`/Contatos/${id}`);
+    getContact(id){
+        return apiClient.get(`/Contacts/${id}`);
     },
-    createContato(contatoDto){
-        return apiClient.post('/Contatos', contatoDto);
+    createContact(contactDto){
+        return apiClient.post('/Contacts', contactDto);
     },
-    updateContato(id, contatoDto){
-        return apiClient.put(`/Contatos/${id}`, contatoDto);
+    updateContact(id, contactDto){
+        return apiClient.put(`/Contacts/${id}`, contactDto);
     },
-    deleteContato(id){
-        return apiClient.delete(`/Contatos/${id}`);
+    deleteContact(id){
+        return apiClient.delete(`/Contacts/${id}`);
     }
 }

@@ -28,27 +28,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddValidatorsFromAssemblyContaining<CreateContatoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateContactValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-// 1. Pega a string de conexão
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 2. Configura o DbContext...
+
 builder.Services.AddDbContext<AgendaDbContext>(options =>
     options.UseNpgsql(connectionString)
 );
 
-// 3. Regista o Repositório...
-builder.Services.AddScoped<IContatoRepository, ContatoRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
     
-// 4. Regista o Serviço...
-builder.Services.AddScoped<ICadastroService, CadastroService>();
+builder.Services.AddScoped<IContactService, ContactService>();
     
 var app = builder.Build();
 
-// Configura o pipeline de requisições HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();  
@@ -57,10 +54,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(MyAllowSpecificOrigins);
 
-// app.UseHttpsRedirection(); // Pode comentar isto para evitar o aviso
 app.UseAuthorization();
 
-// Diz à API para usar os Controladores que criamos
 app.MapControllers();
 
 app.Run();

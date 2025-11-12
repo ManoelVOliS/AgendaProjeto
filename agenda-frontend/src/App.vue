@@ -1,5 +1,5 @@
 <script setup>
-import ContatoList from "./components/ContatoList.vue";
+import ContactList from "./components/ContactList.vue";
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import ContatoList from "./components/ContatoList.vue";
     </header>
 
     <main>
-      <ContatoList />
+      <ContactList />
     </main>
   </div>
 </template>
