@@ -9,7 +9,8 @@ namespace Agenda.Api.Mappers
         public MappingProfile() 
         {
             CreateMap<CreateContactDto, Contact>();
-            CreateMap<UpdateContactDto, Contact>(); 
+            CreateMap<UpdateContactDto, Contact>();
+            CreateMap<Contact, ContactResponseDto>();
         }
 
     }

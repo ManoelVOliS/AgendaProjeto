@@ -2,7 +2,6 @@ using Agenda.Core.Entities;
 using Agenda.Core.Interface; 
 using Microsoft.AspNetCore.Mvc;
 using Agenda.Core.Dtos;
-using AutoMapper; 
 
 namespace Agenda.Api.Controllers
 {
@@ -11,32 +10,30 @@ namespace Agenda.Api.Controllers
     public class ContactsController : ControllerBase
     {
         private readonly IContactService _contactService;
-        private readonly IMapper _mapper; 
 
-        public ContactsController(IContactService contactService, IMapper mapper)
+        public ContactsController(IContactService contactService)
         {
             _contactService = contactService;
-            _mapper = mapper; 
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var contacts = await _contactService.GetAllContactsAsync();
-            return Ok(contacts);
+            var contactsDto = await _contactService.GetAllContactsAsync();
+            return Ok(contactsDto);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var contact = await _contactService.GetContactByIdAsync(id);
+            var contactDto = await _contactService.GetContactByIdAsync(id);
 
-            if (contact == null)
+            if (contactDto == null)
             {
                 return NotFound();
             }
 
-            return Ok(contact);
+            return Ok(contactDto);
         }
 
         [HttpPost]
@@ -44,14 +41,12 @@ namespace Agenda.Api.Controllers
         {
             try
             {
-                var contact = _mapper.Map<Contact>(contactDto); 
-                var novoContact = await _contactService.CreateContactAsync(contact);
+                var newContactDto = await _contactService.CreateContactAsync(contactDto);
 
-                return CreatedAtAction(nameof(GetById), new { id = novoContact.Id }, novoContact);    
+                return CreatedAtAction(nameof(GetById), new { id = newContactDto.Id }, newContactDto);    
             }
             catch (Exception ex)
-            {
-                
+            { 
                 return BadRequest(ex.Message);
             }
             
@@ -59,13 +54,10 @@ namespace Agenda.Api.Controllers
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateContactDto contactDto)
-        {
-            var contact = _mapper.Map<Contact>(contactDto);
-            contact.Id = id; 
-
+        { 
             try
             {
-                await _contactService.UpdateContactAsync(contact);
+                await _contactService.UpdateContactAsync(id, contactDto);
             }
             catch (Exception ex)
             {

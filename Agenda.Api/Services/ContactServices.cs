@@ -1,34 +1,55 @@
 using Agenda.Core.Entities;
 using Agenda.Core.Interface;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Agenda.Core.Dtos;
+using AutoMapper;
+using Agenda.Core.Exceptions;
 
 namespace Agenda.Api.Services
 {
     public class ContactService : IContactService
     {
         private readonly IContactRepository _contactRepository;
+        private readonly IMapper _mapper;
 
-        public ContactService(IContactRepository contactRepository)
+        public ContactService(IContactRepository contactRepository, IMapper mapper)
         {
             _contactRepository = contactRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Contact> CreateContactAsync(Contact contact)
+        public async Task<IEnumerable<ContactResponseDto>> GetAllContactsAsync()
         {
+            var contacts = await _contactRepository.GetAllAsync();
+
+            return _mapper.Map<IEnumerable<ContactResponseDto>>(contacts);
+        }
+
+        public async Task<ContactResponseDto?> GetContactByIdAsync(int id)
+        {
+            var contact = await _contactRepository.GetByIdAsync(id);
+
+            return _mapper.Map<ContactResponseDto?>(contact);
+        }
+        
+        public async Task<ContactResponseDto> CreateContactAsync(CreateContactDto createDto)
+        {
+            var contact = _mapper.Map<Contact>(createDto);
             var infoExists = await _contactRepository.GetByEmailAsync(contact.Email);
-            if(infoExists != null)
+
+            if (infoExists != null)
             {
-                throw new Exception("Email já cadastrado");
+                throw new DuplicateDataException("Email já cadastrado");
             }
 
             var phoneExists = await _contactRepository.GetByPhoneAsync(contact.Phone);
-            if(phoneExists != null)
+            if (phoneExists != null)
             {
-                throw new Exception("Telefone já cadastrado");
+                throw new DuplicateDataException("Telefone já cadastrado");
             }
 
-            return await _contactRepository.AddAsync(contact);
+            var newContact = await _contactRepository.AddAsync(contact);
+            
+            return _mapper.Map<ContactResponseDto>(newContact);
         }
 
         public async Task DeleteContactAsync(int id)
@@ -39,33 +60,25 @@ namespace Agenda.Api.Services
                 await _contactRepository.DeleteAsync(contact);
             }
         }
-        public async Task<IEnumerable<Contact>> GetAllContactsAsync()
-        {
-            return await _contactRepository.GetAllAsync();
-        }
 
-        public async Task<Contact?> GetContactByIdAsync(int id)
+        public async Task UpdateContactAsync(int id, UpdateContactDto updateDto)
         {
-            return await _contactRepository.GetByIdAsync(id);
-        }
-
-        public async Task UpdateContactAsync(Contact contact)
-        {
+            var contact = _mapper.Map<Contact>(updateDto);
             var emailExists = await _contactRepository.GetByEmailAsync(contact.Email);
-            if (emailExists != null && emailExists.Id != contact.Id) 
+            if (emailExists != null && emailExists.Id != contact.Id)
             {
-                throw new System.Exception("Email já cadastrado");
+                throw new DuplicateDataException("Email já cadastrado");
             }
-            
+
             var phoneExists = await _contactRepository.GetByPhoneAsync(contact.Phone);
             if (phoneExists != null && phoneExists.Id != contact.Id)
             {
-                throw new System.Exception("Telefone já cadastrado");
+                throw new DuplicateDataException("Telefone já cadastrado");
             }
             var contactExists = await _contactRepository.GetByIdAsync(contact.Id);
             if (contactExists == null)
             {
-                throw new System.Exception("Contact não encontrado");
+                throw new NotFoundException("Contact não encontrado");
             }
 
             contactExists.Name = contact.Name;
