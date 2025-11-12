@@ -46,7 +46,7 @@ function exitModal() {
       </div>
       <div class="p-field">
         <label for="phone">Phone</label>
-        <InputText id="phone" v-model="contactLocal.phone" />
+        <InputText id="phone" v-model="contactLocal.phone" p-keyfilter="int" />
       </div>
     </div>
     

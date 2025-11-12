@@ -18,7 +18,8 @@ namespace Agenda.Api.Validators
             RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("O telefone é obrigatório.")
                 .MinimumLength(9).WithMessage("O telefone deve ter no mínimo 8 caracteres.")
-                .MaximumLength(15).WithMessage("O telefone deve ter no máximo 15 caracteres.");
+                .MaximumLength(15).WithMessage("O telefone deve ter no máximo 15 caracteres.")
+                .Matches("^[0-9]+$").WithMessage("Apenas números.");
 
         }
     }
