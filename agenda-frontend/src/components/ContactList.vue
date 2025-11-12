@@ -97,27 +97,37 @@ onMounted(() => {
 <template>
   <div class="card">
     <Toolbar class="mb-4">
-      <template #start>
-        <Button label="Add" icon="pi pi-plus" class="p-button-success" @click="openNewModal" />
-      </template>
-    </Toolbar>
+      <template #end> <Button label="Add" icon="pi pi-plus" class="p-button-success" @click="openNewModal" />
+      </template>
+    </Toolbar>
 
-    <DataTable :value="contacts" tableStyle="min-width: 50rem">
-      <Column field="id" header="ID"></Column>
-      <Column field="name" header="Name"></Column>
-      <Column field="email" header="Email"></Column>
-      <Column field="phone" header="Phone"></Column>
-      
-      <Column header="Actions">
-        <template #body="slotProps">
-          <Button icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" 
-            @click="openEditModal(slotProps.data)" />
-          
-          <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" 
-             @click="deleteContact(slotProps.data)" />
-        </template>
-      </Column>
-    </DataTable>
+<DataTable :value="contacts" tableStyle="min-width: 50rem">
+  <Column field="name" header="Name"></Column>
+  <Column field="email" header="Email"></Column>
+
+  <Column 
+    field="phone" 
+    header="Phone" 
+    headerStyle="text-align: center" 
+    bodyClass="text-center"
+  ></Column>
+  
+  <Column 
+    header="Actions" 
+    headerStyle="text-align: center"
+  >
+    <template #body="slotProps">
+      <div class="actions-center"> 
+        <Button icon="pi pi-pencil" class="p-button-rounded p-button-success" 
+                @click="openEditModal(slotProps.data)" />
+        
+        <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" 
+                @click="deleteContact(slotProps.data)" />
+      </div>
+    </template>
+  </Column>
+
+</DataTable>
 
   <ContactForm 
   :visible="modalVisible" 
@@ -127,12 +137,3 @@ onMounted(() => {
   />
    </div>
 </template>
-
-<style scoped>
-.p-mr-2 {
-  margin-right: 0.5rem;
-}
-.mb-4 {
-  margin-bottom: 1.5rem;
-}
-</style>
