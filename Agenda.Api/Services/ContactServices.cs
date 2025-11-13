@@ -65,17 +65,18 @@ namespace Agenda.Api.Services
         {
             var contact = _mapper.Map<Contact>(updateDto);
             var emailExists = await _contactRepository.GetByEmailAsync(contact.Email);
-            if (emailExists != null && emailExists.Id != contact.Id)
+            Console.WriteLine(id);
+            if (emailExists != null && emailExists.Id != id)
             {
                 throw new DuplicateDataException("Email já cadastrado");
             }
 
             var phoneExists = await _contactRepository.GetByPhoneAsync(contact.Phone);
-            if (phoneExists != null && phoneExists.Id != contact.Id)
+            if (phoneExists != null && phoneExists.Id != id)
             {
                 throw new DuplicateDataException("Telefone já cadastrado");
             }
-            var contactExists = await _contactRepository.GetByIdAsync(contact.Id);
+            var contactExists = await _contactRepository.GetByIdAsync(id);
             if (contactExists == null)
             {
                 throw new NotFoundException("Contact não encontrado");
