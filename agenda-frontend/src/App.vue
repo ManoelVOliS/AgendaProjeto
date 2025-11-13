@@ -1,5 +1,6 @@
 <script setup>
 import ContactList from "./components/ContactList.vue";
+import { Toast } from "primevue";
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import ContactList from "./components/ContactList.vue";
     </header>
 
     <main>
+      <Toast position="top-left"/>
       <ContactList />
     </main>
   </div>
