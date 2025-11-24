@@ -85,13 +85,6 @@ async function saveContact(contact) {
     console.error("Erro ao salvar contato:", error);
     if (error.response && error.response.status === 400) {
       if (error.response.data) {
-        // let messages = (error.response.data);
-        // toast.add({
-        // severity: "error",
-        // summary: "Erro",
-        // detail: messages,
-        // life: 3000,
-        // });
         alert(error.response.data)
       } else if (typeof error.response.data === 'string') {
         alert(error.response.data);
